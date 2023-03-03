@@ -63,9 +63,9 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             switch result {
             case .success(let data):
                 self?.data = data
-                DispatchQueue.main.async {
-                    self?.tableView.reloadData()
-                }
+                self?.tableView.reloadData()
+                
+                
             case .failure(_):
                 break
             }
@@ -88,17 +88,14 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             switch result {
             case .success(let data):
                 self?.data = data
-                DispatchQueue.main.async {
-                    self?.tableView.reloadData()
-                    
-                    self?.tableView.contentOffset.y = state.lastPosition
-                    self?.prev.removeLast()
-                    
-                    if self?.prev.count == 0 {
-                        self?.navigationBar.isHidden = true
-                        self?.parentId = 0
-                    }
+                self?.tableView.reloadData()
+                self?.prev.removeLast()
+                
+                if self?.prev.count == 0 {
+                    self?.navigationBar.isHidden = true
+                    self?.parentId = 0
                 }
+                
             case .failure(_):
                 break
             }
@@ -153,20 +150,29 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         let position = scrollView.contentOffset.y
         lastPosition = position
-        if position > (tableView.contentSize.height - 100-scrollView.frame.size.height) {
+        
+        if position > (tableView.contentSize.height - 100 - scrollView.frame.size.height) {
+            
             // fetch more data
             guard !DatabaseCaller.shared.isPaginating else {
                 // we are already fetching more data
                 return
             }
+            DatabaseCaller.shared.isPaginating = true
             self.tableView.tableFooterView = createSpinnerFooter()
             limit += 20
             DatabaseCaller.shared.fetchData(pagination: true, parentId: parentId, limit: limit) { [weak self] result in
+                
                 self?.tableView.tableFooterView = nil
+                
                 switch result {
                 case .success(let moreData):
                     self?.data = moreData
                     self?.tableView.reloadData()
+                    DispatchQueue.global().asyncAfter(deadline: .now() + 2, execute: {
+                        DatabaseCaller.shared.isPaginating = false
+                    })
+                    
                 case .failure(_):
                     break
                 }

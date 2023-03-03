@@ -14,10 +14,7 @@ class DatabaseCaller {
     static let shared = DatabaseCaller()
     
     func fetchData(pagination: Bool = false, parentId: Int? = nil, limit: Int, completion: @escaping(Result<[Row], Error>) -> Void) {
-        if pagination {
-            isPaginating = true
-        }
-        
+                
         var data = [Row]()
         
         // SELECT QUERY
@@ -29,7 +26,7 @@ class DatabaseCaller {
         if (sqlite3_prepare_v2(dbQueue, selectStatementString, -1, &selectStatementQuery, nil)) == SQLITE_OK {
             while sqlite3_step(selectStatementQuery) == SQLITE_ROW {
                 let id = Int(sqlite3_column_int(selectStatementQuery, 0))
-                let count = getCount(parentId: id)
+                let count = self.getCount(parentId: id)
                 let row = Row(_id: id, _name: String(cString: sqlite3_column_text(selectStatementQuery, 1)), _parent_id: Int(sqlite3_column_int(selectStatementQuery, 2)), count: count)
                 
                 data.append(row)
@@ -39,9 +36,6 @@ class DatabaseCaller {
         }
         
         completion(.success(data))
-        if pagination {
-            self.isPaginating = false
-        }
     }
     
     private func getCount(parentId: Int) -> Int {
