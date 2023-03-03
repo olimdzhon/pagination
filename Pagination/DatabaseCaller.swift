@@ -6,65 +6,58 @@
 //
 
 import Foundation
+import SQLite3
 
 class DatabaseCaller {
     var isPaginating = false
     
     static let shared = DatabaseCaller()
     
-    func fetchData(pagination: Bool = false, completion: @escaping(Result<[String], Error>) -> Void) {
+    func fetchData(pagination: Bool = false, parentId: Int? = nil, limit: Int, completion: @escaping(Result<[Row], Error>) -> Void) {
         if pagination {
             isPaginating = true
         }
-        DispatchQueue.global().asyncAfter(deadline:  .now() + (pagination ? 3 : 2), execute: {
-            let oridinalData = [
-                "Apple",
-                "Google",
-                "Facebook",
-                "Apple",
-                "Google",
-                "Facebook",
-                "Apple",
-                "Google",
-                "Facebook",
-                "Apple",
-                "Google",
-                "Facebook",
-                "Apple",
-                "Google",
-                "Facebook",
-                "Apple",
-                "Google",
-                "Facebook",
-                "Apple",
-                "Google",
-                "Facebook",
-                "Apple",
-                "Google",
-                "Facebook",
-                "Apple",
-                "Google",
-                "Facebook",
-                "Apple",
-                "Google",
-                "Facebook",
-                "Apple",
-                "Google",
-                "Facebook",
-                "Apple",
-                "Google",
-                "Facebook",
-            ]
-            
-            let newData = [
-                "banana", "oranges", "grapes", "Food"
-            ]
-            
-            
-            completion(.success(pagination ? newData : oridinalData))
-            if pagination {
-                self.isPaginating = false
+        
+        var data = [Row]()
+        
+        // SELECT QUERY
+        
+        let selectStatementString = "SELECT _id, _name, _parent_id FROM tt WHERE _parent_id = \(parentId ?? 0) ORDER BY _name ASC LIMIT \(limit)"
+        
+        var selectStatementQuery: OpaquePointer?
+        
+        if (sqlite3_prepare_v2(dbQueue, selectStatementString, -1, &selectStatementQuery, nil)) == SQLITE_OK {
+            while sqlite3_step(selectStatementQuery) == SQLITE_ROW {
+                let id = Int(sqlite3_column_int(selectStatementQuery, 0))
+                let count = getCount(parentId: id)
+                let row = Row(_id: id, _name: String(cString: sqlite3_column_text(selectStatementQuery, 1)), _parent_id: Int(sqlite3_column_int(selectStatementQuery, 2)), count: count)
+                
+                data.append(row)
             }
-        })
+            
+            sqlite3_finalize(selectStatementQuery)
+        }
+        
+        completion(.success(data))
+        if pagination {
+            self.isPaginating = false
+        }
+    }
+    
+    private func getCount(parentId: Int) -> Int {
+        var count = 0
+        let selectStatementString = "SELECT COUNT(*) FROM tt WHERE _parent_id = \(parentId)"
+        
+        var selectStatementQuery: OpaquePointer?
+        
+        if (sqlite3_prepare_v2(dbQueue, selectStatementString, -1, &selectStatementQuery, nil)) == SQLITE_OK {
+            while sqlite3_step(selectStatementQuery) == SQLITE_ROW {
+                count = Int(sqlite3_column_int(selectStatementQuery, 0))
+            }
+            
+            sqlite3_finalize(selectStatementQuery)
+        }
+        
+        return count
     }
 }

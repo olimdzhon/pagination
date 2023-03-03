@@ -6,3 +6,8 @@
 //
 
 import Foundation
+struct Prev {
+    var lastPosition: CGFloat
+    var _parent_id: Int
+    var limit: Int
+}
