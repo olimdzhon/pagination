@@ -15,9 +15,45 @@
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3mw-Nb-uwu">
+                                <rect key="frame" x="0.0" y="59" width="393" height="44"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="44" id="8KD-oK-4ci"/>
+                                </constraints>
+                                <items>
+                                    <navigationItem title="Pagination" id="awS-aV-FDp">
+                                        <barButtonItem key="leftBarButtonItem" title="Back" image="chevron.left" catalog="system" id="mhj-lv-UuU">
+                                            <connections>
+                                                <action selector="backButtonAction:" destination="BYZ-38-t0r" id="3WC-vX-j6H"/>
+                                            </connections>
+                                        </barButtonItem>
+                                    </navigationItem>
+                                </items>
+                            </navigationBar>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="XPe-T9-3Ci">
+                                <rect key="frame" x="0.0" y="103" width="393" height="666"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                            </tableView>
+                        </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="XPe-T9-3Ci" secondAttribute="trailing" id="8TR-TQ-3W4"/>
+                            <constraint firstItem="3mw-Nb-uwu" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="Ih4-BF-CV9"/>
+                            <constraint firstItem="XPe-T9-3Ci" firstAttribute="top" secondItem="3mw-Nb-uwu" secondAttribute="bottom" id="IuN-s5-d45"/>
+                            <constraint firstItem="3mw-Nb-uwu" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="cwF-d7-LXI"/>
+                            <constraint firstItem="3mw-Nb-uwu" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="hhv-Z9-GxZ"/>
+                            <constraint firstItem="XPe-T9-3Ci" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="kCe-9Z-84L"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="XPe-T9-3Ci" secondAttribute="bottom" id="vL6-hb-714"/>
+                        </constraints>
                     </view>
+                    <toolbarItems/>
+                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
+                    <connections>
+                        <outlet property="backButton" destination="mhj-lv-UuU" id="Xxv-hI-G6N"/>
+                        <outlet property="tableView" destination="XPe-T9-3Ci" id="Qsq-tY-tdc"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
@@ -25,6 +61,7 @@
         </scene>
     </scenes>
     <resources>
+        <image name="chevron.left" catalog="system" width="97" height="128"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
