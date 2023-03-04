@@ -3,6 +3,7 @@
     <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
+        <capability name="Image references" minToolsVersion="12.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -22,11 +23,21 @@
                                     <constraint firstAttribute="height" constant="44" id="8KD-oK-4ci"/>
                                 </constraints>
                                 <items>
-                                    <navigationItem title="Pagination" id="awS-aV-FDp">
-                                        <barButtonItem key="leftBarButtonItem" title="Back" image="chevron.left" catalog="system" id="mhj-lv-UuU">
-                                            <connections>
-                                                <action selector="backButtonAction:" destination="BYZ-38-t0r" id="3WC-vX-j6H"/>
-                                            </connections>
+                                    <navigationItem id="awS-aV-FDp">
+                                        <barButtonItem key="leftBarButtonItem" title="Item" style="plain" id="o8V-zP-inh">
+                                            <button key="customView" opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="leading" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" id="7S8-UG-s0L">
+                                                <rect key="frame" x="16" y="5" width="45" height="34.333333333333336"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <state key="normal" title="Button"/>
+                                                <buttonConfiguration key="configuration" style="plain" title="Back" buttonSize="mini">
+                                                    <imageReference key="image" image="chevron.left" catalog="system" symbolScale="default"/>
+                                                    <preferredSymbolConfiguration key="preferredSymbolConfigurationForImage" scale="default"/>
+                                                    <directionalEdgeInsets key="contentInsets" top="0.0" leading="0.0" bottom="0.0" trailing="0.0"/>
+                                                </buttonConfiguration>
+                                                <connections>
+                                                    <action selector="backButtonAction:" destination="BYZ-38-t0r" eventType="touchUpInside" id="9jJ-LU-fDW"/>
+                                                </connections>
+                                            </button>
                                         </barButtonItem>
                                     </navigationItem>
                                 </items>
@@ -51,7 +62,7 @@
                     <toolbarItems/>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
-                        <outlet property="backButton" destination="mhj-lv-UuU" id="Xxv-hI-G6N"/>
+                        <outlet property="backButton" destination="7S8-UG-s0L" id="Mii-wT-M4s"/>
                         <outlet property="tableView" destination="XPe-T9-3Ci" id="Qsq-tY-tdc"/>
                     </connections>
                 </viewController>
